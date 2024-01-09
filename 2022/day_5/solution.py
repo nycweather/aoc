@@ -1,5 +1,6 @@
 # importing the data
 import os
+import copy
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 with open(f'{dir_path}/input.txt') as file:
@@ -24,7 +25,7 @@ res = [[] for _ in range(number_of_stack)]
 
 # putting the boxes in their stacks
 for i, k in enumerate(original):
-    if original[(i*4)+1].isdigit():
+    if original[(i*4)+1].isdigit():  # end of boxes
         break
     if original[(i*4)+1].isalpha():
         # print(i % number_of_stack, original[(i*4)+1])
@@ -39,6 +40,8 @@ for i, k in enumerate(original):
 # i[1] = from stack
 # i[2] = to stack
 
+res_2 = copy.deepcopy(res)
+
 for i in instructions:
     boxes_to_move = int(i[0])
     from_stack = int(i[1])-1
@@ -52,4 +55,21 @@ for i in instructions:
 # print(res)
 print("Part 1: ", end="")
 for stack in res:
+    print(stack[0], end="")
+
+
+# part 2
+# Move multiple boxes at once
+
+for i in instructions:
+    boxes_to_move = int(i[0])
+    from_stack = int(i[1])-1
+    to_stack = int(i[2])-1
+    temp = []
+    for _ in range(boxes_to_move):
+        temp.append(res_2[from_stack].pop(0))
+    res_2[to_stack] = temp + res_2[to_stack]
+
+print("\nPart 2: ", end="")
+for stack in res_2:
     print(stack[0], end="")
